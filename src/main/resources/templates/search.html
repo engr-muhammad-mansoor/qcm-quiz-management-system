@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>QCM-isib</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+  /* Style personnalisé pour la navigation */
+    .navbar {
+      padding: 10px;
+      background: linear-gradient(to right, darkblue , grey,#333399, #333399);
+      color: white;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      color: white;
+    }
+
+    .navbar-text {
+      margin-left: 10px;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+      position: relative;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .navbar-nav .nav-item .nav-link:before {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: transparent;
+      transition: background-color 0.3s;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover:before {
+      background-color: white;
+    }
+
+    .navbar-nav .nav-item .nav-link .fa {
+      margin-right: 5px;
+    }
+
+    /* Sous-liens horizontaux dans les menus déroulants */
+    .dropdown-menu .dropdown-submenu {
+      position: relative;
+    }
+
+    .dropdown-menu .dropdown-submenu .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: -1px;
+    }
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+
+
+</style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#" style="color:white">
+    <img th:src="@{/images/Capture.PNG}"  width="40" height="40" class="d-inline-block align-top" alt="">
+    QCM-PRINT
+  </a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    </ul>
+    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/}" style="color:white"><i class="fas fa-home" style="color:white"></i> Accueil</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/Category}" style="color:white"><i class="fas fa-list" style="color:white"></i> Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/Question}" style="color:white"><i class="fas fa-question" style="color:white"></i> Questions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/Qcm}" style="color:white"><i class="fas fa-poll" style="color:white"></i> QCM</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container-fluid text-center">
+  <div><h2 style="margin-top:20px;margin-bottom:20px;color:darkblue;font-weight: bold;"><i class="fas fa-list" style="color:green"></i> List of Questions</h2></div>
+  <div class="m-2">
+
+  </div>
+
+  <div class="m-2">
+    <a tyle="margin-bottom:20px;" class="btn btn-primary" th:href="@{/Question/new}">
+      <i class="fas fa-plus"></i> Add a new question
+    </a>
+  </div>
+
+
+
+  <div th:if="${message}" class="alert alert-success text-center">
+    [[${message}]]
+  </div>
+  
+    <form th:action="@{/Question/search}" method="get">
+        <div class="row search-option">
+            <div class="col-12">
+                <hr/>
+            </div>
+            <div class="col-2">
+
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="category">Category :</label>
+                    <select id="category" name="categoryId" class="form-control">
+                        <option value="''"></option>
+                        <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" 
+                                th:selected="${param.categoryId == cat.id}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="keyword">Type Anything :</label>
+                    <input type="text" id="keyword" name="keyword" class="form-control"  minlength="1"
+                           maxlength="90" th:value="*{param.keyword}"/>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="form-group">
+                    <label for="keyword">&nbsp;</label>
+                    <button type="submit" class="btn btn-block btn-primary">Search</button>
+                </div>
+            </div>
+            <div class="col-12">
+                <hr/>
+            </div>
+        </div>
+    </form>
+  
+  
+  
+  <div> <br /></div>
+  <div>
+    <table class="table table-bordered">
+      <thead style="   background: linear-gradient(to right, darkblue ,#333399, #333399,darkgray); color: white;">
+      <tr>
+        <!-- <th>ID</th> -->
+        <th>Question Name</th>
+        <th>Option A</th>
+        <th>Option B</th>
+        <th>Option C</th>
+        <th>Option D</th>
+
+        <th>Categories</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <th:block th:each="question : ${questions}">
+        <tr>
+          <!--  <td>[[${question.id}]]</td>-->
+            <td>[[${question.name}]]</td>
+            <td>[[${question.cha}]]</td>
+            <td>[[${question.chab}]]</td>
+            <td>[[${question.chac}]]</td>
+            <td>[[${question.chad}]]</td>
+
+            <td>[[${question.category.name}]]</td>
+
+            <td>
+              <a class="btn btn-success mr-3" th:href="@{'/Question/edit/' + ${question.id}}">
+                <i class="fas fa-edit"></i>
+              </a>
+              <a class="btn btn-danger" th:href="@{'/Question/delete/' + ${question.id}}">
+                <i class="fas fa-trash-alt"></i>
+              </a>
+            </td>
+          </tr>
+        </th:block>
+
+        </tbody>
+      </table>
+      <div class="pagination-container">
+        <ul class="pagination" style="font-weight: bold">
+          <li th:each="pageNumber : ${pageNumbers}"  style="font-weight: bold">
+            <a th:href="@{'/Question?page=' + ${pageNumber}}" th:text="${pageNumber}" class="page-link"  style="font-weight: bold; background:blue; color:white;"></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  </body>
+  </html>

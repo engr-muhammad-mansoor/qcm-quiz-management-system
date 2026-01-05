@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>QCM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+    /* Style personnalisé pour la navigation */
+    .navbar {
+      padding: 10px;
+      background: linear-gradient(to right, darkblue , grey,#333399, #333399);
+      color: white;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      color: white;
+      font-size:20px;
+    }
+
+    .navbar-text {
+      margin-left: 10px;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+      position: relative;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .navbar-nav .nav-item .nav-link:before {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: transparent;
+      transition: background-color 0.3s;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover:before {
+      background-color: white;
+    }
+
+    .navbar-nav .nav-item .nav-link .fa {
+      margin-right: 5px;
+    }
+
+    /* Sous-liens horizontaux dans les menus déroulants */
+    .dropdown-menu .dropdown-submenu {
+      position: relative;
+    }
+
+    .dropdown-menu .dropdown-submenu .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: -1px;
+    }
+      /*  */
+       body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      background:  linear-gradient(to right, darkblue , grey,#333399, #333399);
+    }
+
+    .dashboard-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, aqua, darkblue);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .dashboard-header {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #fff;
+    }
+
+    .dashboard-cards {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+      width: 250px;
+      height: 200px;
+      padding: 20px;
+      text-align: center;
+      background-color: #fff;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dashboard-card i {
+      font-size: 48px;
+      color: #007bff;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-card h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      color: #444;
+    }
+
+    .dashboard-card p {
+      font-size: 18px;
+      color: #666;
+      margin: 0;
+    }
+
+    .dashboard-card:not(.active) {
+      cursor: pointer;
+    }
+
+    .dashboard-card:not(.active):hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .dashboard-card:not(.active):hover i {
+      color: #0056b3;
+    }
+
+    .dashboard-card.active {
+      background-color: #fff;
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .dashboard-card.active i {
+      color: #0056b3;
+    }
+
+    .dashboard-card:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+      z-index: -1;
+    }
+
+    .dashboard-card:hover:before {
+      transform: scaleX(1);
+    }
+       .dashboard-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .dashboard-action {
+      padding: 15px 25px;
+      background-color: #007bff;
+      color: #fff;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      margin: 0 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .dashboard-action i {
+      margin-right: 10px;
+    }
+
+    .dashboard-action:hover {
+      background-color: orangered;
+    }
+      .dashboard-logo {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .dashboard-logo img {
+      width: 100px; /* Ajustez la largeur du logo selon vos préférences */
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#" style="color:white">
+        <img th:src="@{/images/Capture.PNG}"  width="40" height="40" class="d-inline-block align-top" alt="">
+        QCM-PRINT
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        </ul>
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/}" style="color:white"><i class="fas fa-home" style="color:white"></i> Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/Category}" style="color:white"><i class="fas fa-list" style="color:white"></i> Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/Question}" style="color:white"><i class="fas fa-question" style="color:white"></i> Questions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/Qcm}" style="color:white"><i class="fas fa-poll" style="color:white"></i> QCM</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-chart-bar"></i> Dashboard QCM</h1>
+    </div>
+
+    <div class="dashboard-cards" id="dashboard-cards">
+        <div class="dashboard-card active">
+            <i th:href="@{/Category}" class="fas fa-list"></i>
+            <br>
+            <a style="font-size:22px" th:href="@{/Category}">Categories</a>
+
+        </div>
+        <div class="dashboard-card">
+            <i th:href="@{/Question}" class="fas fa-question"></i>
+            <br>
+            <a style="font-size:22px" th:href="@{/Question}">Questions</a>
+
+        </div>
+        <div class="dashboard-card">
+            <i class="fas fa-poll"></i>
+            <br>
+            <a style="font-size:22px" th:href="@{/Qcm}">QCM</a>
+
+        </div>
+
+    </div>
+
+
+</div>
+<!-- Scripts pour Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.7.1/gsap.min.js"></script>
+<script>
+    const cards = document.getElementById('dashboard-cards').children;
+    let currentIndex = 0;
+    const animationDuration = 0.5 * 1000; // Animation duration in milliseconds (0.5 seconds)
+
+    function activateCard(index) {
+      for (let i = 0; i < cards.length; i++) {
+        cards[i].classList.remove('active');
+        gsap.to(cards[i], { opacity: 0.8, scale: 0.95, boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)', duration: animationDuration / 1000 });
+      }
+      cards[index].classList.add('active');
+      gsap.to(cards[index], { opacity: 1, scale: 1, boxShadow: '0 15px 50px rgba(0, 0, 0, 0.2)', duration: animationDuration / 1000 });
+    }
+
+    function nextCard() {
+      currentIndex = (currentIndex + 1) % cards.length;
+      activateCard(currentIndex);
+    }
+
+    // Initial activation
+    activateCard(currentIndex);
+
+    setInterval(nextCard, 1000); // Change card every 1 seconds
+  </script>
+</body>
+</html>

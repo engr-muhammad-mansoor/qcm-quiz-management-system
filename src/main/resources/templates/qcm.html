@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>QCM</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        /* Style personnalisé pour la navigation */
+          .navbar {
+            padding: 10px;
+            background: linear-gradient(to right, darkblue , grey,#333399, #333399);
+            color: white;
+          }
+
+          .navbar-brand {
+            font-weight: bold;
+            color: white;
+          }
+
+          .navbar-text {
+            margin-left: 10px;
+          }
+
+          .navbar-nav .nav-item .nav-link {
+            position: relative;
+            font-weight: bold;
+            font-size: 1.2em;
+          }
+
+          .navbar-nav .nav-item .nav-link:before {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: transparent;
+            transition: background-color 0.3s;
+          }
+
+          .navbar-nav .nav-item .nav-link:hover:before {
+            background-color: white;
+          }
+
+          .navbar-nav .nav-item .nav-link .fa {
+            margin-right: 5px;
+          }
+
+          /* Sous-liens horizontaux dans les menus déroulants */
+          .dropdown-menu .dropdown-submenu {
+            position: relative;
+          }
+
+          .dropdown-menu .dropdown-submenu .dropdown-menu {
+            top: 0;
+            left: 100%;
+            margin-top: -1px;
+          }
+          .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+          }
+
+
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler"
+            data-target="#navbarTogglerDemo03" data-toggle="collapse" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#" style="color:white">
+        <img alt="" class="d-inline-block align-top" height="40" th:src="@{/images/Capture.PNG}" width="40">
+        QCM-PRINT
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        </ul>
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" style="color:white" th:href="@{/}"><i class="fas fa-home" style="color:white"></i>
+                    Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color:white" th:href="@{/Category}"><i class="fas fa-list"
+                                                                                  style="color:white"></i>
+                    Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color:white" th:href="@{/Question}"><i class="fas fa-question"
+                                                                                  style="color:white"></i> Questions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" style="color:white" th:href="@{/Qcm}"><i class="fas fa-poll"
+                                                                             style="color:white"></i> QCM</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Conteneur centré -->
+
+<div class="container-fluid text-center">
+    <div class="category-title">
+        <h2 style="margin-top:20px;margin-bottom:20px;color:darkblue;font-weight: bold;"><i class="fas fa-poll"
+                                                                                            style="color:green"></i> QCM
+        </h2>
+    </div>
+</div>
+<div class="container">
+    <form id="qcmForm" method="post" style="max-width: 590px; margin: 0 auto;" th:action="@{/QcmTest}">
+        <div class="card border-secondary rounded p-3">
+
+
+            <div class="form-group row mb-3">
+                <label class="col-sm-4 col-form-label text-end" for="optionA" style="font-weight: bold;">Number of
+                    Questions:</label>
+                <div class="col-sm-8">
+                    <input class="form-control" min="0" name="numberOfQuestions" type="number"/>
+                </div>
+            </div>
+
+            <div class="form-group row mb-3">
+                <div class="col-12">
+                    <div class="text-center">
+                        <i class="fas fa-list" style="color:green"><label class="form-label" for="categories"
+                                                                          style="color: green; font-size:24px;"><b>
+                            Categories</b></label></i>
+                    </div>
+                    <hr style="background: orange;">
+                    <div class="form-group">
+                        <!-- Iterate over categories and display each as a checkbox -->
+                        <div class="row" th:each="category : ${categories}">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <label class="form-check-label" style="color:darkblue; font-weight: bold; display: flex;">
+                                        <!-- Display the category name -->
+                                        <span th:text="${category.name}" style="flex: 1;"></span>
+                                        <!-- Display the count of questions for the category -->
+                                        <span th:text="'NB: ' + ${questionCountForCategory[category.id]} + ' Qts'"
+                                              style="margin-left: auto;"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group" style="flex: 1; margin-left: 10px;">
+                                    <!-- Display the input field for the number of questions for the category -->
+                                    <input class="form-control form-control-sm question-count"
+                                           min="0"
+                                           th:attr="data-category-id=${category.id}" type="number">
+                                </div>
+                            </div>
+                        </div>
+                        <hr style="background: orange;">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row mb-3">
+                <label class="col-sm-4 col-form-label text-end" for="optionA" style="font-weight: bold;">Number of Test
+                    :</label>
+                <div class="col-sm-8">
+                    <input class="form-control" min="1" name="numberOfTests" type="number"/>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary m-2" type="submit">Generate Tests</button>
+            </div>
+
+        </div>
+    </form>
+    <br><br><br>
+</div>
+<script>
+    document.getElementById('qcmForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        // Construct questionData map
+        var questionData = new Map();
+        var totalCategories = 0;
+
+        // Iterate over each question count input and add to questionData
+        document.querySelectorAll('.question-count').forEach(function(input) {
+            var categoryId = input.getAttribute('data-category-id');
+            var count = input.value;
+            totalCategories = totalCategories + Number(count);
+            questionData.set(categoryId, count);
+        });
+
+        // Set up form data object
+        var formData = new FormData();
+
+        // Append questionData map to form data
+        for (var [key, value] of questionData.entries()) {
+            formData.append('questionData[' + key + ']', value);
+        }
+
+        // Get the number of tests and questions from the input fields
+        var numberOfTests = document.querySelector('input[name="numberOfTests"]').value;
+        var numberOfQuestions = document.querySelector('input[name="numberOfQuestions"]').value;
+
+        if(totalCategories !== Number(numberOfQuestions)){
+        alert('Total Number of Questions do not match the Total count for Category Input');
+        return;
+        }
+        // Remove numberOfTests and numberOfQuestions from formData
+        formData.delete('numberOfTests');
+        formData.delete('numberOfQuestions');
+
+        // Add numberOfTests and numberOfQuestions to formData as plain text
+        formData.append('numberOfTests', numberOfTests.toString());
+        formData.append('numberOfQuestions', numberOfQuestions.toString());
+
+        // Set up AJAX request
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/QcmTest');
+        xhr.responseType = 'blob'; // Set the response type to blob
+
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                // Handle success response
+                var blob = new Blob([xhr.response], { type: 'application/zip' }); // Create a blob from the response
+                var url = window.URL.createObjectURL(blob); // Create an object URL for the blob
+                var a = document.createElement('a'); // Create a link element
+                a.href = url;
+                a.download = 'invoices.zip'; // Set the download file name
+                a.click(); // Trigger the download
+            } else {
+                // Handle error response
+                if(xhr.status == 500){
+                // Handle error response
+        const reader = new FileReader();
+        reader.onload = function() {
+            const errorResponse = JSON.parse(reader.result);
+            alert('Error: ' + errorResponse.error);
+        };
+        reader.readAsText(xhr.response); // Read response as text
+    }
+            }
+        };
+        xhr.send(formData);
+    });
+</script>
+</body>
+</html>

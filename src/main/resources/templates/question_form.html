@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>QCM-isib</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+
+    .navbar {
+      padding: 10px;
+      background: linear-gradient(to right, darkblue , grey,#333399, #333399);
+      color: white;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      color: white;
+    }
+
+    .navbar-text {
+      margin-left: 10px;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+      position: relative;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .navbar-nav .nav-item .nav-link:before {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: transparent;
+      transition: background-color 0.3s;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover:before {
+      background-color: white;
+    }
+
+    .navbar-nav .nav-item .nav-link .fa {
+      margin-right: 5px;
+    }
+
+
+    .dropdown-menu .dropdown-submenu {
+      position: relative;
+    }
+
+    .dropdown-menu .dropdown-submenu .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: -1px;
+    }
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#" style="color:white">
+    <img th:src="@{/images/Capture.PNG}"  width="40" height="40" class="d-inline-block align-top" alt="">
+    QCM-PRINT
+  </a>
+
+  <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+    </ul>
+    <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/}" style="color:white"><i class="fas fa-home" style="color:white"></i> Accueil</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/Category}" style="color:white"><i class="fas fa-list" style="color:white"></i> Categories</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/Question}" style="color:white"><i class="fas fa-question" style="color:white"></i> Questions</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  th:href="@{/Qcm}" style="color:white"><i class="fas fa-poll" style="color:white"></i> QCM</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="text-center"><h2>[[${pageTitle}]]</h2></div>
+
+  <form th:action="@{/Question/save}" method="post" th:object="${question}" style="max-width: 500px; margin: 0 auto;">
+    <input type="hidden" th:field="*{id}">
+    <div class="card border-secondary rounded p-3">
+      <div class="form-group row mb-3">
+        <label for="category" class="col-sm-4 col-form-label text-end">Category :</label>
+        <div class="col-sm-8">
+          <select id="category" th:field="*{category.id}" class="form-control" required>
+            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${cat.id == question.category.id}"></option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label for="questionText" class="col-sm-4 col-form-label text-end">Question :</label>
+        <div class="col-sm-8">
+         <!-- <input type="text" th:field="*{name}" id="questionText" class="form-control" required minlength="2" maxlength="90"  />-->
+          <textarea class="form-control" rows="5" id="questionText" name="text" th:field="*{name}"></textarea>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label for="optionA" class="col-sm-4 col-form-label text-end">Option A :</label>
+        <div class="col-sm-8">
+          <input type="text" th:field="*{cha}" id="optionA" class="form-control" required minlength="1" maxlength="90"/>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label for="optionB" class="col-sm-4 col-form-label text-end">Option B :</label>
+        <div class="col-sm-8">
+          <input type="text" th:field="*{chab}" id="optionB" class="form-control" required minlength="1" maxlength="90"/>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label for="optionC" class="col-sm-4 col-form-label text-end">Option C :</label>
+        <div class="col-sm-8">
+          <input type="text" th:field="*{chac}" id="optionC" class="form-control" required minlength="1" maxlength="90"/>
+        </div>
+      </div>
+      <div class="form-group row mb-3">
+        <label for="optionD" class="col-sm-4 col-form-label text-end">Option D :</label>
+        <div class="col-sm-8">
+          <input type="text" th:field="*{chad}" id="optionD" class="form-control" required minlength="1" maxlength="90"/>
+        </div>
+      </div>
+
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary m-2">Save</button>
+        <button type="button" class="btn btn-warning m-2" onclick="cancelForm()">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>
+<script type="text/javascript">
+  function cancelForm() {
+    window.location = "[[@{/Question}]]";
+  }
+</script>
+</body>
+</html>

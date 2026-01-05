@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <title>QCM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+    /* Custom styles */
+
+
+    .navbar {
+      padding: 10px;
+      background: linear-gradient(to right, darkblue , grey,#333399, #333399);
+      color: white;
+    }
+
+    .navbar-brand {
+      font-weight: bold;
+      color: white;
+    }
+
+    .navbar-text {
+      margin-left: 10px;
+    }
+
+    .navbar-nav .nav-item .nav-link {
+      position: relative;
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .navbar-nav .nav-item .nav-link:before {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: transparent;
+      transition: background-color 0.3s;
+    }
+
+    .navbar-nav .nav-item .nav-link:hover:before {
+      background-color: white;
+    }
+
+    .navbar-nav .nav-item .nav-link .fa {
+      margin-right: 5px;
+    }
+
+
+    .dropdown-menu .dropdown-submenu {
+      position: relative;
+    }
+
+    .dropdown-menu .dropdown-submenu .dropdown-menu {
+      top: 0;
+      left: 100%;
+      margin-top: -1px;
+    }
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#" style="color:white">
+        <img th:src="@{/images/Capture.PNG}"  width="40" height="40" class="d-inline-block align-top" alt="">
+        QCM-PRINT
+    </a>
+
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        </ul>
+        <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/}" style="color:white"><i class="fas fa-home" style="color:white"></i> Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/Category}" style="color:white"><i class="fas fa-list" style="color:white"></i> Categories</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/Question}" style="color:white"><i class="fas fa-question" style="color:white"></i> Questions</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  th:href="@{/Qcm}" style="color:white"><i class="fas fa-poll" style="color:white"></i> QCM</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid text-center">
+    <div class="category-title">
+        <h2 style="margin-top:20px;margin-bottom:20px;color:darkblue;font-weight: bold;"><i class="fas fa-list" style="color:green"></i> List of Categories</h2>
+    </div>
+    <div class="add-category-btn">
+        <a style="margin-bottom:20px;" class="btn btn-primary" th:href="@{/Category/new}">
+            <i class="fas fa-plus"></i> Add a new category
+        </a>
+    </div>
+    <div th:if="${message}" class="alert alert-success text-center">
+        [[${message}]]
+    </div>    
+    <div>
+        <div>
+            <table class="table table-bordered"  style="width: 800px;margin-left: auto;
+    margin-right: auto;">
+                <thead style="   background: linear-gradient(to right, darkblue ,#333399, #333399,darkgray); color: white;">
+                <tr>
+                    <th style="width: 50px;">ID</th>
+                    <th style="width: 150px;">Category Name</th>
+                    <th style="width: 200px;">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="category : ${categoryPage.content}">
+                    <td th:text="${category.id}"></td>
+                    <td th:text="${category.name}"></td>
+                    <td>
+                        <a class="btn btn-success" th:href="@{'/Category/edit/' + ${category.id}}">
+                            <i class="fas fa-edit"></i> To modify
+                        </a>
+                        <a class="btn btn-danger" th:href="@{'/Category/delete/' + ${category.id}}">
+                            <i class="fas fa-trash-alt"></i> DELETE
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination-container">
+            <ul class="pagination" style="font-weight: bold">
+                <li th:each="pageNumber : ${pageNumbers}" style="font-weight: bold">
+                    <a th:href="@{'/Category?page=' + ${pageNumber}}" th:text="${pageNumber}" class="page-link" style="font-weight: bold; background:blue; color:white;"></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- Scripts pour Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
