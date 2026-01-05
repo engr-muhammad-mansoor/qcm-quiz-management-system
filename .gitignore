@@ -7,6 +7,9 @@ target/
 # Application properties (contains sensitive data)
 src/main/resources/application.properties
 
+# Temporary instruction files
+PUSH_TO_GITHUB.md
+
 ### STS ###
 .apt_generated
 .classpath
